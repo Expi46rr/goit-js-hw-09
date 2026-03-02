@@ -7,41 +7,39 @@ const formData = {
   message: '',
 };
 
-// ✅ 1) При завантаженні сторінки: відновлюємо дані
+
 const savedData = localStorage.getItem(STORAGE_KEY);
 
 if (savedData) {
   const parsedData = JSON.parse(savedData);
 
-  // заповнюємо поля (без undefined)
+
   form.elements.email.value = parsedData.email ?? '';
   form.elements.message.value = parsedData.message ?? '';
 
-  // синхронізуємо formData
+
   formData.email = parsedData.email ?? '';
   formData.message = parsedData.message ?? '';
 }
 
-// ✅ 2) Делегування: один слухач input на всю форму
+
 form.addEventListener('input', (e) => {
   const name = e.target.name;
   if (name !== 'email' && name !== 'message') return;
 
-  const value = e.target.value.trim();
-
-  formData[name] = value;
+  formData[name] = e.target.value; 
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 });
 
-// ✅ 3) Submit: перевірка + очищення
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  if (formData.email === '' || formData.message === '') {
-    alert('Fill please all fields');
-    return;
-  }
+ if (formData.email.trim() === '' || formData.message.trim() === '') {
+  alert('Fill please all fields');
+  return;
+}
 
   console.log(formData);
 
